@@ -2,7 +2,8 @@
 
 ## Project setup
 ```
-npm install
+INSTALL VUE UI
+LINK -> https://www.youtube.com/watch?v=-y5xYznyQ1A
 ```
 
 ### Compiles and hot-reloads for development
