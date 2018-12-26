@@ -1,0 +1,157 @@
+[
+    {
+        "x1": 0,
+        "x2": 1,
+        "y": "escherichia coli"
+    },
+    {
+        "x1": 1,
+        "x2": 2,
+        "y": "escherichia coli"
+    },
+    {
+        "x1": 2,
+        "x2": 3,
+        "y": "escherichia coli"
+    },
+    {
+        "x1": 3,
+        "x2": 4,
+        "y": "escherichia coli"
+    },
+    {
+        "x1": 4,
+        "x2": 5,
+        "y": "escherichia coli"
+    },
+    {
+        "x1": 5,
+        "x2": 6,
+        "y": "escherichia coli"
+    },
+    {
+        "x1": 6,
+        "x2": 7,
+        "y": "escherichia coli"
+    },
+    {
+        "x1": 7,
+        "x2": 8,
+        "y": "escherichia coli"
+    },
+    {
+        "x1": 8,
+        "x2": 9,
+        "y": "escherichia coli"
+    },
+    {
+        "x1": 9,
+        "x2": 10,
+        "y": "escherichia coli"
+    },
+    {
+        "x1": 10,
+        "x2": 11,
+        "y": "escherichia coli"
+    },
+    {
+        "x1": 11,
+        "x2": 12,
+        "y": "escherichia coli"
+    },
+    {
+        "x1": 12,
+        "x2": 13,
+        "y": "escherichia coli"
+    },
+    {
+        "x1": 13,
+        "x2": 14,
+        "y": "escherichia coli"
+    },
+    {
+        "x1": 14,
+        "x2": 0,
+        "y": "escherichia coli"
+    },
+    {
+        "x1": 15,
+        "x2": 16,
+        "y": "pseudomonas_aeriginosa pao1"
+    },
+    {
+        "x1": 16,
+        "x2": 17,
+        "y": "pseudomonas_aeriginosa pao1"
+    },
+    {
+        "x1": 17,
+        "x2": 18,
+        "y": "pseudomonas_aeriginosa pao1"
+    },
+    {
+        "x1": 18,
+        "x2": 19,
+        "y": "pseudomonas_aeriginosa pao1"
+    },
+    {
+        "x1": 19,
+        "x2": 20,
+        "y": "pseudomonas_aeriginosa pao1"
+    },
+    {
+        "x1": 20,
+        "x2": 21,
+        "y": "pseudomonas_aeriginosa pao1"
+    },
+    {
+        "x1": 21,
+        "x2": 22,
+        "y": "pseudomonas_aeriginosa pao1"
+    },
+    {
+        "x1": 22,
+        "x2": 23,
+        "y": "pseudomonas_aeriginosa pao1"
+    },
+    {
+        "x1": 23,
+        "x2": 24,
+        "y": "pseudomonas_aeriginosa pao1"
+    },
+    {
+        "x1": 24,
+        "x2": 25,
+        "y": "pseudomonas_aeriginosa pao1"
+    },
+    {
+        "x1": 25,
+        "x2": 26,
+        "y": "pseudomonas_aeriginosa pao1"
+    },
+    {
+        "x1": 26,
+        "x2": 27,
+        "y": "pseudomonas_aeriginosa pao1"
+    },
+    {
+        "x1": 27,
+        "x2": 28,
+        "y": "pseudomonas_aeriginosa pao1"
+    },
+    {
+        "x1": 28,
+        "x2": 29,
+        "y": "pseudomonas_aeriginosa pao1"
+    },
+    {
+        "x1": 29,
+        "x2": 30,
+        "y": "pseudomonas_aeriginosa pao1"
+    },
+    {
+        "x1": 30,
+        "x2": 15,
+        "y": "pseudomonas_aeriginosa pao1"
+    }
+]
