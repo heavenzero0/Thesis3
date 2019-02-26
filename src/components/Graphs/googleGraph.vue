@@ -2,7 +2,7 @@
     <GChart
             :type="type"
             :data="data"
-            :options="chartOptions"
+            :options="options"
     />
 </template>
 
@@ -19,7 +19,7 @@
         },
         props: [
             'data',
-            'chartOptions',
+            'options',
             'type'
         ],
     }

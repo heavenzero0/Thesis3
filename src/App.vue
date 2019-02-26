@@ -68,11 +68,29 @@
                 items: [],
                 data: [["Iterations", "Accuracy"]], //SET THE DATA TO PASS IN THE GRAPH
                 chartOptions: { //OPTIONS FOR THE CHARTS
-                    title: "Hidden Markov Model Accuracy",
-                    vAxis: { textPosition: "none", minValue: 0 },
-                    hAxis: { textPosition: "none" },
-                    legend: { position: "none", maxlines: 3 },
-                    colors: ["#5870cb"]
+
+
+                    title: 'DNA SEQUENCE',
+                    vAxis: {
+                        minValue: 0,
+                        maxValue: 100,
+                        textStyle: {bold: true},
+                        title: 'Percentage'
+
+                    },
+                    hAxis: {
+                        textStyle: {
+                            fontName: 'Tahoma',
+                            bold: true,
+                            fontSize: 15
+                        },
+                        title: 'Iterations'
+                    },
+                    height: 270,
+                    legend: {position: 'top', maxlines: 3,},
+                    colors: ['#5870cb'],
+                    tooltip: {isHtml: true},
+                    chartArea: {width: '80%',},
                 },
                 value: []
             };
@@ -124,6 +142,7 @@
                             this.value = [...this.value, Math.round(accuracy * 100) / 100];
                             this.data = [...this.data, train];
                         });
+                        console.log(this.data);
                         //CONSOLE LOG this.data TO KNOW THE VALUE INSIDE
 
 
