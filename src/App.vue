@@ -1,40 +1,51 @@
 <template>
-    <v-app dark>
+    <v-app light>
         <v-container grid-list-md>
             <v-layout row wrap>
-                <v-flex sm12 xs12>
-                    <v-card class="grey darken-2 pa-2">
-
-                        <div class="text-xs-center py-2">
+                <v-flex sm4>
+                         <div class="text-xs-center py-2">
                             <v-progress-circular
-                                    :size="70"
+                                    :size="90"
                                     :width="7"
                                     color="green"
                                     indeterminate
                                     class="tt"
                                     v-if="loading"
                             ></v-progress-circular>
-                            <v-card-title v-if="!loading">
-                                <h6 class="display-1 blue--text text--darken-2">Current Accuracy</h6>
+                            <v-card-title v-if="!loading" mt-4>
+                                <h6 class="display-3 green--text text--darken-1" >{{accuracy}}%</h6>
+                                <h6 class="display-2 green--text text--darken-1 font-weight-thin">Accuracy</h6>
+                                <h6 class="display-3 green--text text--darken-1" >Training </h6>
+                                <h6 class="display-2 green--text text--darken-1 font-weight-thin">{{training}} seconds</h6>
+                                
                             </v-card-title>
-                            <v-card-title v-if="!loading">
-                                <h3 class="display-3 green--text text--darken-1" >{{accuracy}}%</h3>
-                            </v-card-title>
-                            <GChart v-if="!loading" :data="data" :options="chartOptions" type="LineChart" />
-                        </div>
-                    </v-card>
+                           </div>
                 </v-flex>
-                <v-flex sm12>
-                    <v-card class="grey darken-2 pa-2">
+                <v-flex sm8>
+                    <div style="height:400px" v-if="loading"></div>
+                    <v-card  v-else height="400px">
+                        <GChart v-if="!loading" :data="data" :options="chartOptions" type="LineChart" height="350px" />
+                    </v-card>
+               
+                </v-flex>
+                <!-- <v-flex sm4>
+                <v-card class="green lighten-3 pa-2" height="215px">
                         <v-text-field label="Input 1" v-model="input1"></v-text-field>
                         <v-text-field label="Input 2" v-model="input2"></v-text-field>
-                        <v-btn @click="predict" class="blue accent-3">Predict</v-btn>
-                        <v-btn class="blue accent-3" @click="automate">automate</v-btn>
-                    </v-card>
+                        <v-btn @click="predict" class="green darken-2">Predict</v-btn>
+                         <v-btn class="green darken-2" @click="automate">automate</v-btn> 
+                      
+                    </v-card> -->
+<!-- 
+                 </v-flex>
+                 <div v-if="loading"></div>
+                <v-flex v-else dark>
+                      <v-card>
+                         <predictionTable :headers="headers" :genomes="items"/>
+                </v-card>
                 </v-flex>
-                <v-flex sm12>
-                    <predictionTable :headers="headers" :genomes="items"/>
-                </v-flex>
+
+ -->
             </v-layout>
         </v-container>
     </v-app>
@@ -58,6 +69,7 @@
                 outputData: [],
                 testingData: [],
                 loading: true,
+                training : 0,
                 input1: null,
                 input2: null,
                 accuracy: null,
@@ -68,11 +80,26 @@
                 items: [],
                 data: [["Iterations", "Accuracy"]], //SET THE DATA TO PASS IN THE GRAPH
                 chartOptions: { //OPTIONS FOR THE CHARTS
-                    title: "Hidden Markov Model Accuracy",
-                    vAxis: { textPosition: "none", minValue: 0 },
-                    hAxis: { textPosition: "none" },
-                    legend: { position: "none", maxlines: 3 },
-                    colors: ["#5870cb"]
+                    title: 'DNA SEQUENCE',
+                    vAxis: {
+                        minValue: 0,
+                        maxValue: 100,
+                        textStyle: {bold: true},
+                        title: 'Percentage'
+                    },
+                    hAxis: {
+                        textStyle: {
+                            fontName: 'Tahoma',
+                            bold: true,
+                            fontSize: 15
+                        },
+                        title: 'Iterations'
+                    },
+                    height: 400,
+                    legend: {position: 'top', maxlines: 3,},
+                    colors: ['#5870cb'],
+                    tooltip: {isHtml: true},
+                    chartArea: {width: '80%',},
                 },
                 value: []
             };
@@ -80,7 +107,6 @@
         methods: {
             train() {
                 const model = (this.model = tf.sequential());
-
                 model.add(
                     tf.layers.dense({
                         inputShape: [2],
@@ -93,41 +119,39 @@
                     tf.layers.dense({
                         inputShape: [3],
                         activation: "sigmoid",
-                        units: 3
+                        units: 5
                     })
                 );
-
                 model.add(
                     tf.layers.dense({
                         activation: "sigmoid",
-                        units: 3
+                        units: 5
                     })
                 );
-
                 model.compile({
                     loss: "meanSquaredError",
                     optimizer: tf.train.adam(0.06)
                 });
-
+                const beforeTrain = Date.now();
                 model
                     .fit(this.trainingData, this.outputData, {epochs: 100})
                     .then(history => {
                         model.predict(this.testingData).print();
+                        
                         const h =
                             (1 - history.history.loss[history.history.loss.length - 1]) * 100;
-                        this.accuracy = Math.round(h * 100) / 100;
+                        this.accuracy = (Math.round(h * 100) / 100 );
 
                         //CHARTS DATA ARE ALL SET HERE
                         history.history.loss.forEach((val, index) => {
-                            const accuracy = (1 - val) * 100;
+                            const accuracy = ((1 - val) * 100 );
                             const train = [index + 1, Math.round(accuracy * 100) / 100];
                             this.value = [...this.value, Math.round(accuracy * 100) / 100];
                             this.data = [...this.data, train];
                         });
                         //CONSOLE LOG this.data TO KNOW THE VALUE INSIDE
-
-
                         this.loading = false;
+                       this.training = ((Date.now()-beforeTrain)/1000);
                     });
             },
             predict() {
@@ -148,21 +172,22 @@
                 // console.log(predictedValue);
                 predictedValue.data().then(d => {
                     d.forEach((element, index) => {
-                        output[index] = {...output[index], prediction: element};
+                        output[index] = {...output[index], prediction: (1 - +element ) *100};
                     });
                     this.items = output;
                 });
             },
             automate() {
                 let arrr = [];
-                for (let i = 31; i <= 49; i++) {
+                for (let i = 901; i <= 1000; i++) {
                     const dd = {
                         "x1": i,
                         "x2": i + 1,
-                        "y": "Caulobacter vibrioides CB15"
+                        "y": "Vibrio cholerae O1"
                     };
                     arrr = [...arrr, dd];
                 }
+                console.log(arrr);
             }
         },
         created() {
@@ -171,13 +196,16 @@
                 dna.map(item => [
                     item.y === "escherichia coli" ? 1 : 0,
                     item.y === "pseudomonas_aeriginosa pao1" ? 1 : 0,
-                    item.y === "Caulobacter vibrioides CB15" ? 1 : 0
+                     item.y === "Caulobacter vibrioides CB15" ? 1 : 0,
+                    item.y === "Vibrio cholerae O1" ? 1 : 0,
+                     item.y === "Sinorhizobium meliloti 1021" ? 1 : 0
                 ])
             );
             this.testingData = tf.tensor2d(dnaTesting.map(item => [item.x1, item.x2]));
         },
         mounted() {
-            this.train();
+          this.train();
+            //this.automate();
             // this.predict();
         },
         components: {
@@ -197,3 +225,4 @@
     }
 </style>
 
+ 
