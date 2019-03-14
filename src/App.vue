@@ -1,10 +1,9 @@
 <template>
-    <v-app dark>
+    <v-app light>
         <v-container grid-list-md>
             <v-layout row wrap>
                 <v-flex sm12 xs12>
-                    <v-card class="grey darken-2 pa-2">
-
+                    <v-card>
                         <div class="text-xs-center py-2">
                             <v-progress-circular
                                     :size="70"
@@ -14,26 +13,32 @@
                                     class="tt"
                                     v-if="loading"
                             ></v-progress-circular>
-                            <v-card-title v-if="!loading">
-                                <h6 class="display-1 blue--text text--darken-2">Current Accuracy</h6>
-                            </v-card-title>
-                            <v-card-title v-if="!loading">
-                                <h3 class="display-3 green--text text--darken-1" >{{accuracy}}%</h3>
-                            </v-card-title>
+                            <v-layout row wrap>
+                                <v-flex sm6>
+                                    <v-card-title v-if="!loading">
+                                        <h6 class="display-1 blue--text text--darken-2">Current Accuracy</h6>
+                                    </v-card-title>
+                                    <v-card-title v-if="!loading">
+                                        <h3 class="display-3 green--text text--darken-1" >{{accuracy}}%</h3>
+                                    </v-card-title>
+                                </v-flex>
+
+                                <v-flex sm6>
+                                    <v-card-title v-if="!loading">
+                                        <h6 class="display-1 blue--text text--darken-2">Training Time</h6>
+                                    </v-card-title>
+                                    <v-card-title v-if="!loading">
+                                        <h3 class="display-3 green--text text--darken-1" >{{training}}secs</h3>
+                                    </v-card-title>
+                                </v-flex>
+
+                            </v-layout>
+
+
                             <GChart v-if="!loading" :data="data" :options="chartOptions" type="LineChart" />
                         </div>
+
                     </v-card>
-                </v-flex>
-                <v-flex sm12>
-                    <v-card class="grey darken-2 pa-2">
-                        <v-text-field label="Input 1" v-model="input1"></v-text-field>
-                        <v-text-field label="Input 2" v-model="input2"></v-text-field>
-                        <v-btn @click="predict" class="blue accent-3">Predict</v-btn>
-                        <v-btn class="blue accent-3" @click="automate">automate</v-btn>
-                    </v-card>
-                </v-flex>
-                <v-flex sm12>
-                    <predictionTable :headers="headers" :genomes="items"/>
                 </v-flex>
             </v-layout>
         </v-container>
@@ -48,7 +53,7 @@
     import output from "./assets/output.json";
     // import Spinner from "./components/UI/spinner";
     import GChart from "./components/Graphs/googleGraph";
-    import PredictionTable from "./components/UI/predictionTable";
+    // import PredictionTable from "./components/UI/predictionTable";
 
     export default {
         name: "App",
@@ -89,10 +94,11 @@
                     height: 270,
                     legend: {position: 'top', maxlines: 3,},
                     colors: ['#5870cb'],
-                    tooltip: {isHtml: true},
                     chartArea: {width: '80%',},
                 },
-                value: []
+                value: [],
+                progress: 0,
+                training: 0
             };
         },
         methods: {
@@ -111,14 +117,14 @@
                     tf.layers.dense({
                         inputShape: [3],
                         activation: "sigmoid",
-                        units: 3
+                        units: 5
                     })
                 );
 
                 model.add(
                     tf.layers.dense({
                         activation: "sigmoid",
-                        units: 3
+                        units: 5
                     })
                 );
 
@@ -127,9 +133,12 @@
                     optimizer: tf.train.adam(0.06)
                 });
 
+                const beforeTrain = Date.now();
                 model
                     .fit(this.trainingData, this.outputData, {epochs: 100})
                     .then(history => {
+
+                        // console.log(history);
                         model.predict(this.testingData).print();
                         const h =
                             (1 - history.history.loss[history.history.loss.length - 1]) * 100;
@@ -142,12 +151,14 @@
                             this.value = [...this.value, Math.round(accuracy * 100) / 100];
                             this.data = [...this.data, train];
                         });
-                        console.log(this.data);
+                        // console.log(this.data);
                         //CONSOLE LOG this.data TO KNOW THE VALUE INSIDE
 
 
                         this.loading = false;
+                        this.training = ((Date.now()-beforeTrain)/1000);
                     });
+
             },
             predict() {
                 this.items = [];
@@ -189,8 +200,10 @@
             this.outputData = tf.tensor2d(
                 dna.map(item => [
                     item.y === "escherichia coli" ? 1 : 0,
+                    item.y === "Sinorhizobium meliloti 1021" ? 1 : 0,
                     item.y === "pseudomonas_aeriginosa pao1" ? 1 : 0,
-                    item.y === "Caulobacter vibrioides CB15" ? 1 : 0
+                    item.y === "Caulobacter vibrioides CB15" ? 1 : 0,
+                    item.y === "Vibrio cholerae O1" ? 1 : 0,
                 ])
             );
             this.testingData = tf.tensor2d(dnaTesting.map(item => [item.x1, item.x2]));
@@ -200,7 +213,7 @@
             // this.predict();
         },
         components: {
-            'predictionTable': PredictionTable,
+            // 'predictionTable': PredictionTable,
             'GChart': GChart
         }
     };
